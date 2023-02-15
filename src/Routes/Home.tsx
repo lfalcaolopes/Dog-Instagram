@@ -56,21 +56,19 @@ const Wrapper = styled.div`
 const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  grid-column-gap: 1rem;
-  grid-row-gap: 1rem;
+  gap: 1rem;
 
   img {
-    width: 15rem;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+
     border-radius: 3px;
   }
 
   .big-foto {
-    grid-area: 1 / 2 / 3 / 4;
-
-    img {
-      width: 31rem;
-    }
+    grid-column: span 2;
+    grid-row: span 2;
   }
 `;
 

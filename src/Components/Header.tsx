@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import Dogs from "./Assets/dogs.svg";
-import Usuario from "./Assets/usuario.svg";
+import Dogs from "../Assets/dogs.svg";
+import Usuario from "../Assets/usuario.svg";
 import { Link } from "react-router-dom";
 
 function Header() {

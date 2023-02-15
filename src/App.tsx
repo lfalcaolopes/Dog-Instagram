@@ -1,10 +1,10 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import styled from "styled-components";
-import Footer from "./Footer";
-import Header from "./Header";
-import Home from "./Home";
-import Login from "./Login";
-import SingUp from "./SingUp";
+import Footer from "./Components/Footer";
+import Header from "./Components/Header";
+import Home from "./Routes/Home";
+import Login from "./Routes/Login";
+import SingUp from "./Routes/SingUp";
 
 function App() {
   return (
@@ -25,8 +25,8 @@ function App() {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-
   min-height: calc(100vh + 7rem);
+
   background-color: hsl(0, 0%, 90%);
   font-family: "Roboto", sans-serif;
 `;

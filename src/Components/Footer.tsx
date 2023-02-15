@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import DogsFooter from "./Assets/dogs-footer.svg";
+import DogsFooter from "../Assets/dogs-footer.svg";
 
 function Footer() {
   return (
