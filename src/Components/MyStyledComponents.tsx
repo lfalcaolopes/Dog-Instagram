@@ -21,6 +21,8 @@ const StyledForm = styled.form`
 
 const StyledTitle = styled.h2`
   position: relative;
+  font-family: "Libre Baskerville", serif;
+  color: #2e2e2e;
   font-size: 3rem;
   z-index: 2;
 
@@ -88,12 +90,3 @@ const StyledButton = styled.button`
 `;
 
 export { StyledForm, StyledTitle, StyledButton };
-
-// .hvr-outline-out {
-//   display: inline-block;
-//   vertical-align: middle;
-//   -webkit-transform: perspective(1px) translateZ(0);
-//   transform: perspective(1px) translateZ(0);
-//   box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-//   position: relative;
-// }

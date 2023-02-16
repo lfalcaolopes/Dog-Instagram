@@ -30,18 +30,9 @@ function Home() {
     <Wrapper>
       <Grid>
         {fotos?.map((foto, index) => (
-          <>
-            {index === 1 && (
-              <div key={foto.id} className="big-foto">
-                <img src={foto.src} alt={foto.title} />
-              </div>
-            )}
-            {index !== 1 && (
-              <div key={foto.id}>
-                <img src={foto.src} alt={foto.title} />
-              </div>
-            )}
-          </>
+          <div key={foto.id} className={index === 1 ? "big-foto" : ""}>
+            <img src={foto.src} alt={foto.title} />
+          </div>
         ))}
       </Grid>
     </Wrapper>

@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import styled from "styled-components";
 import Footer from "./Components/Footer";
 import Header from "./Components/Header";
+import Account from "./Routes/Account";
 import Home from "./Routes/Home";
 import Login from "./Routes/Login";
 import SingUp from "./Routes/SingUp";
@@ -15,6 +16,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="login" element={<Login />} />
           <Route path="login/criar" element={<SingUp />} />
+          <Route path="conta" element={<Account />} />
         </Routes>
         <Footer />
       </Wrapper>

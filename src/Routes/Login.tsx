@@ -1,9 +1,33 @@
+import { FormEvent, useRef } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import dogHat from "../Assets/login.jpg";
 import { StyledForm, StyledTitle, StyledButton } from "../Components/MyStyledComponents";
 
 function Login() {
+  const user = useRef<HTMLInputElement>(null);
+  const pass = useRef<HTMLInputElement>(null);
+
+  // async function name(params:type) {
+
+  // }
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const username = user.current?.value;
+    const password = pass.current?.value;
+
+    const response = await fetch(`https://dogsapi.origamid.dev/json/jwt-auth/v1/token`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password }),
+    });
+
+    const json = await response.json();
+
+    console.log(json);
+  }
+
   return (
     <Wrapper>
       <div className="image-side">
@@ -12,16 +36,16 @@ function Login() {
       <div className="form-side">
         <div className="login">
           <StyledTitle>Login</StyledTitle>
-          <StyledForm>
+          <StyledForm onSubmit={handleSubmit}>
             <label>
               <p>Usuário</p>
               <div className="input-hover">
-                <input type="text" size={30} />
+                <input type="text" ref={user} size={40} />
               </div>
             </label>
             <label>
               <p>Senha</p>
-              <input type="text" size={30} />
+              <input type="password" ref={pass} size={40} />
             </label>
             <StyledButton>Entrar</StyledButton>
           </StyledForm>
@@ -72,7 +96,7 @@ const Wrapper = styled.div`
     }
 
     .cadastro {
-      margin-bottom: 2rem;
+      margin-bottom: 3rem;
 
       p {
         margin-bottom: 1.5rem;
