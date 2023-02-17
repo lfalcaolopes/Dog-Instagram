@@ -39,9 +39,7 @@ function Login() {
           <StyledForm onSubmit={handleSubmit}>
             <label>
               <p>Usuário</p>
-              <div className="input-hover">
-                <input type="text" ref={user} size={40} />
-              </div>
+              <input type="text" ref={user} size={40} />
             </label>
             <label>
               <p>Senha</p>
@@ -89,8 +87,7 @@ const Wrapper = styled.div`
     margin: 0 2rem;
 
     p,
-    a,
-    button {
+    a {
       font-size: 1.2rem;
       color: #454545;
     }

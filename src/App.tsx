@@ -5,7 +5,9 @@ import Header from "./Components/Header";
 import Account from "./Routes/Account";
 import Home from "./Routes/Home";
 import Login from "./Routes/Login";
+import Post from "./Routes/Post";
 import SingUp from "./Routes/SingUp";
+import Statistics from "./Routes/Statistics";
 
 function App() {
   return (
@@ -16,7 +18,9 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="login" element={<Login />} />
           <Route path="login/criar" element={<SingUp />} />
-          <Route path="conta" element={<Account />} />
+          <Route path="conta/geral" element={<Account />} />
+          <Route path="conta/estatisticas" element={<Statistics />} />
+          <Route path="conta/postar" element={<Post />} />
         </Routes>
         <Footer />
       </Wrapper>

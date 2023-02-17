@@ -6,7 +6,9 @@ const StyledForm = styled.form`
   justify-items: start;
   margin-bottom: 1.5rem;
 
-  input {
+  input[type="text"],
+  input[type="password"],
+  input[type="email"] {
     border: none;
     padding: 10px 20px;
     border-radius: 5px;
@@ -16,6 +18,10 @@ const StyledForm = styled.form`
 
     font-size: 1rem;
     color: #454545;
+  }
+
+  input[type="file"] {
+    font-size: 1rem;
   }
 `;
 
@@ -45,6 +51,7 @@ const StyledTitle = styled.h2`
 const StyledButton = styled.button`
   display: block;
   background-color: #fb1;
+  font-size: 1.2rem;
   color: #764701;
   box-shadow: 2px 3px 10px #666666;
   border: none;
@@ -89,4 +96,35 @@ const StyledButton = styled.button`
   }
 `;
 
-export { StyledForm, StyledTitle, StyledButton };
+const StyledAccountButtons = styled.div`
+  margin: 3rem 0 1.5rem;
+
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+
+  a {
+    background-color: white;
+    border-radius: 3px;
+    padding: 5px;
+    z-index: 0;
+    border: #fff solid 1px;
+    cursor: pointer;
+
+    &:hover,
+    &:focus {
+      background: hsl(0, 0%, 100%);
+      box-shadow: 0 0 0 2px hsl(0, 0%, 50%);
+      border-color: #000;
+    }
+  }
+  .active,
+  .active:hover,
+  .active:focus {
+    background: #fff;
+    box-shadow: 0 0 0 3px #fea;
+    border-color: #fb1;
+  }
+`;
+
+export { StyledForm, StyledTitle, StyledButton, StyledAccountButtons };

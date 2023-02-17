@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import AccountHeader from "../Components/AccountHeader";
 
-function Account() {
+function Statistics() {
   return (
     <Wrapper>
-      <AccountHeader titleText="Minha Conta" />
-      <h1>account</h1>
+      <AccountHeader titleText="Estatisticas" />
+      <h1>Estatisticas</h1>
     </Wrapper>
   );
 }
@@ -15,4 +15,4 @@ const Wrapper = styled.div`
   margin: 0 25%;
 `;
 
-export default Account;
+export default Statistics;
