@@ -1,16 +1,16 @@
-import { FormEvent, useRef } from "react";
-import { Link } from "react-router-dom";
+import { FormEvent, useContext, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import dogHat from "../Assets/login.jpg";
 import { StyledForm, StyledTitle, StyledButton } from "../Components/MyStyledComponents";
+import { GlobalContext } from "../GlobalContext";
 
 function Login() {
+  const userContext = useContext(GlobalContext);
   const user = useRef<HTMLInputElement>(null);
   const pass = useRef<HTMLInputElement>(null);
 
-  // async function name(params:type) {
-
-  // }
+  const navigate = useNavigate();
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -25,7 +25,9 @@ function Login() {
 
     const json = await response.json();
 
-    console.log(json);
+    userContext?.setDadosUser(json);
+
+    navigate("/conta/geral");
   }
 
   return (

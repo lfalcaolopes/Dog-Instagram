@@ -1,11 +1,12 @@
 import styled from "styled-components";
 import { StyledTitle, StyledAccountButtons } from "./MyStyledComponents";
-import { MouseEvent, ReactNode, useEffect, useState } from "react";
+import { MouseEvent, ReactNode, useContext, useEffect, useState } from "react";
 import { Adicionar } from "../Assets/adicionar";
 import { Feed } from "../Assets/feed";
 import { Estatisticas } from "../Assets/estatisticas";
 import { Sair } from "../Assets/sair";
 import { NavLink, Outlet } from "react-router-dom";
+import { GlobalContext } from "../GlobalContext";
 
 interface props {
   titleText: string;
@@ -14,6 +15,7 @@ interface props {
 function AccountHeader({ titleText }: props) {
   const buttons = document.querySelectorAll("button");
   const [clickedButton, setClickedButton] = useState<HTMLAnchorElement>();
+  const userContext = useContext(GlobalContext);
 
   useEffect(() => {
     buttons.forEach((otherButton) => {
@@ -23,8 +25,10 @@ function AccountHeader({ titleText }: props) {
   }, [clickedButton]);
 
   function handleClick(event: MouseEvent<HTMLAnchorElement>) {
-    console.log(event.currentTarget);
     setClickedButton(event.currentTarget);
+    if (event.currentTarget.className === "exit") {
+      userContext?.setDadosUser(undefined);
+    }
   }
 
   return (
@@ -40,7 +44,7 @@ function AccountHeader({ titleText }: props) {
         <NavLink to="/conta/postar" onClick={handleClick}>
           {({ isActive }: { isActive: boolean }) => <Adicionar fill={isActive ? "#fb1" : ""} />}
         </NavLink>
-        <NavLink to="/login" onClick={handleClick}>
+        <NavLink to="/login" className="exit" onClick={handleClick}>
           {({ isActive }: { isActive: boolean }) => <Sair fill={isActive ? "#fb1" : ""} />}
         </NavLink>
       </StyledAccountButtons>

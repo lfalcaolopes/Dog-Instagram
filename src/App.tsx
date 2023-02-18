@@ -8,23 +8,26 @@ import Login from "./Routes/Login";
 import Post from "./Routes/Post";
 import SingUp from "./Routes/SingUp";
 import Statistics from "./Routes/Statistics";
+import { GlobalStorageProvider } from "./GlobalContext";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Wrapper>
-        <Header />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="login" element={<Login />} />
-          <Route path="login/criar" element={<SingUp />} />
-          <Route path="conta/geral" element={<Account />} />
-          <Route path="conta/estatisticas" element={<Statistics />} />
-          <Route path="conta/postar" element={<Post />} />
-        </Routes>
-        <Footer />
-      </Wrapper>
-    </BrowserRouter>
+    <GlobalStorageProvider>
+      <BrowserRouter>
+        <Wrapper>
+          <Header />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="login" element={<Login />} />
+            <Route path="login/criar" element={<SingUp />} />
+            <Route path="conta/geral" element={<Account />} />
+            <Route path="conta/estatisticas" element={<Statistics />} />
+            <Route path="conta/postar" element={<Post />} />
+          </Routes>
+          <Footer />
+        </Wrapper>
+      </BrowserRouter>
+    </GlobalStorageProvider>
   );
 }
 

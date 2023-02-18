@@ -2,8 +2,24 @@ import styled from "styled-components";
 import Dogs from "../Assets/dogs.svg";
 import Usuario from "../Assets/usuario.svg";
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { GlobalContext } from "../GlobalContext";
 
 function Header() {
+  const userContext = useContext(GlobalContext);
+  let nameOrLogin;
+  let route;
+
+  if (userContext?.dadosUser) {
+    const name = userContext.dadosUser.user_display_name;
+
+    nameOrLogin = name[0].toUpperCase() + name.substring(1);
+    route = "/conta/geral";
+  } else {
+    nameOrLogin = "Login / Criar";
+    route = "login";
+  }
+
   return (
     <>
       <Wrapper>
@@ -13,8 +29,8 @@ function Header() {
           </Link>
         </div>
         <div className="header-elements">
-          <Link to="login">
-            Login / Criar
+          <Link to={route}>
+            {nameOrLogin}
             <img src={Usuario} className="usuario-img" alt="" />
           </Link>
         </div>
@@ -42,7 +58,7 @@ const Wrapper = styled.section`
     text-decoration: none;
 
     .usuario-img {
-      margin-left: 5px;
+      margin-left: 0.5rem;
     }
   }
 
