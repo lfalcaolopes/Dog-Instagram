@@ -103,6 +103,7 @@ const Wrapper = styled.div`
 
       a {
         text-decoration: none;
+        outline: none;
       }
     }
   }

@@ -9,7 +9,7 @@ const StyledForm = styled.form`
   input[type="text"],
   input[type="password"],
   input[type="email"] {
-    border: none;
+    border: 1px solid white;
     padding: 10px 20px;
     border-radius: 5px;
     margin-top: 0.5rem;
@@ -22,6 +22,13 @@ const StyledForm = styled.form`
 
   input[type="file"] {
     font-size: 1rem;
+  }
+
+  input:focus {
+    background: #fff;
+    outline: none;
+    box-shadow: 0 0 0 3px #fea;
+    border-color: #fb1;
   }
 `;
 
@@ -92,6 +99,7 @@ const StyledButton = styled.button`
   &:hover,
   &:focus,
   &:active {
+    outline: none;
     box-shadow: none;
   }
 `;

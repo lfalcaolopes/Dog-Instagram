@@ -35,14 +35,20 @@ function Header() {
           </Link>
         </div>
       </Wrapper>
-      <hr />
+      {/* <hr /> */}
     </>
   );
 }
 
-const Wrapper = styled.section`
-  margin: 0 25%;
+const Wrapper = styled.div`
+  padding: 0 25%;
   height: 4rem;
+  z-index: 50;
+  background-color: hsl(0, 0%, 90%);
+  box-shadow: 0px 0px 20px 5px rgba(0, 0, 0, 0.2);
+
+  position: sticky;
+  top: 0;
 
   display: flex;
   justify-content: space-between;
@@ -60,18 +66,6 @@ const Wrapper = styled.section`
     .usuario-img {
       margin-left: 0.5rem;
     }
-  }
-
-  hr {
-    /* border: 0;
-    height: 1px;
-    background-image: -webkit-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
-    background-image: -moz-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
-    background-image: -ms-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
-    background-image: -o-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0); */
-
-    /* -webkit-box-shadow: 0px 9px 11px -10px rgba(0, 0, 0, 0.75);
-    box-shadow: 0px 9px 11px -10px rgba(0, 0, 0, 0.75); */
   }
 `;
 
