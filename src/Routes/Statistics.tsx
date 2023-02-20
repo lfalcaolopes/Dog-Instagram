@@ -3,16 +3,23 @@ import AccountHeader from "../Components/AccountHeader";
 
 function Statistics() {
   return (
-    <Wrapper>
-      <AccountHeader titleText="Estatisticas" />
-      <h1>Estatisticas</h1>
-    </Wrapper>
+    <Margin>
+      <Wrapper>
+        <AccountHeader titleText="Estatisticas" />
+        <h1>Estatisticas</h1>
+      </Wrapper>
+    </Margin>
   );
 }
 
-const Wrapper = styled.div`
+const Margin = styled.div`
   flex: 1;
-  margin: 0 25%;
+`;
+
+const Wrapper = styled.div`
+  max-width: 50rem;
+  padding: 0 2rem;
+  margin: 0 auto;
 `;
 
 export default Statistics;

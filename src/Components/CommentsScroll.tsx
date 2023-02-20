@@ -7,32 +7,14 @@ interface comentario {
   comment_id: string;
 }
 
-const comment_arr = [
-  { comment_author: "larry", comment_content: "cade minhas flores", comment_id: "1" },
-  { comment_author: "asdf", comment_content: "cade minhas flores jorgiiiiin", comment_id: "2" },
-  { comment_author: "fw", comment_content: "cade ", comment_id: "3" },
-  { comment_author: "dfs", comment_content: "cade minhas flores", comment_id: "4" },
-  { comment_author: "dfs", comment_content: "cade minhas flores", comment_id: "5" },
-  { comment_author: "dfs", comment_content: "cade minhas flores", comment_id: "6" },
-  { comment_author: "dfs", comment_content: "cade minhas flores", comment_id: "7" },
-  { comment_author: "dfs", comment_content: "cade minhas flores", comment_id: "8" },
-  { comment_author: "dfs", comment_content: "cade minhas flores", comment_id: "9" },
-  { comment_author: "dfs", comment_content: "cade minhas flores", comment_id: "11" },
-  { comment_author: "dfs", comment_content: "cade minhas flores", comment_id: "22" },
-  { comment_author: "dfs", comment_content: "cade minhas flores", comment_id: "33" },
-  { comment_author: "dfs", comment_content: "cade minhas flores", comment_id: "44" },
-  { comment_author: "dfs", comment_content: "cade minhas flores", comment_id: "55" },
-  { comment_author: "dfs", comment_content: "cade minhas flores", comment_id: "66" },
-  { comment_author: "dfs", comment_content: "cade minhas flores", comment_id: "77" },
-];
-
 function CommentsScroll({ comentarios }: { comentarios: comentario[] }) {
+  const reversed = comentarios.reverse();
   return (
-    <Wrapper>
+    <ScrollAreaWrapper>
       <ScrollArea.Root className="ScrollAreaRoot">
         <ScrollArea.Viewport className="ScrollAreaViewport">
-          {comentarios.map((comentario) => (
-            <p key={comentario.comment_id}>
+          {reversed.map((comentario, index) => (
+            <p key={`${comentario.comment_id}-${index}`}>
               <span>{comentario.comment_author}:</span>
               {comentario.comment_content}
             </p>
@@ -46,15 +28,15 @@ function CommentsScroll({ comentarios }: { comentarios: comentario[] }) {
         </ScrollArea.Scrollbar>
         <ScrollArea.Corner className="ScrollAreaCorner" />
       </ScrollArea.Root>
-    </Wrapper>
+    </ScrollAreaWrapper>
   );
 }
 
-const Wrapper = styled.div`
-  margin-top: 2rem;
+const ScrollAreaWrapper = styled.div`
+  margin: 2rem 0 1rem;
 
   p {
-    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
     font-size: 1.1rem;
     color: #333333;
 
@@ -66,7 +48,7 @@ const Wrapper = styled.div`
   }
 
   .ScrollAreaRoot {
-    height: 20rem;
+    height: 16rem;
     overflow: hidden;
   }
 

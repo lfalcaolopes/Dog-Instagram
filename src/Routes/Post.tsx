@@ -10,33 +10,40 @@ function Post() {
   const fileRef = useRef<HTMLInputElement>(null);
 
   return (
-    <Wrapper>
-      <AccountHeader titleText="Poste Sua Foto" />
-      <StyledForm>
-        <label>
-          <p>Nome</p>
-          <div className="input-hover">
-            <input type="text" ref={nameRef} size={40} />
-          </div>
-        </label>
-        <label>
-          <p>Peso</p>
-          <input type="text" ref={weightRef} size={40} />
-        </label>
-        <label>
-          <p>Idade</p>
-          <input type="text" ref={ageRef} size={40} />
-        </label>
-        <input type="file" ref={fileRef} />
-        <StyledButton>Enviar</StyledButton>
-      </StyledForm>
-    </Wrapper>
+    <Margin>
+      <Wrapper>
+        <AccountHeader titleText="Poste Sua Foto" />
+        <StyledForm>
+          <label>
+            <p>Nome</p>
+            <div className="input-hover">
+              <input type="text" ref={nameRef} size={40} />
+            </div>
+          </label>
+          <label>
+            <p>Peso</p>
+            <input type="text" ref={weightRef} size={40} />
+          </label>
+          <label>
+            <p>Idade</p>
+            <input type="text" ref={ageRef} size={40} />
+          </label>
+          <input type="file" ref={fileRef} />
+          <StyledButton>Enviar</StyledButton>
+        </StyledForm>
+      </Wrapper>
+    </Margin>
   );
 }
 
-const Wrapper = styled.div`
+const Margin = styled.div`
   flex: 1;
-  margin: 0 25%;
+`;
+
+const Wrapper = styled.div`
+  max-width: 50rem;
+  padding: 0 2rem;
+  margin: 0 auto;
 
   form {
     margin-top: 2rem;

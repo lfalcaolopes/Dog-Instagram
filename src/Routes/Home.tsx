@@ -35,10 +35,9 @@ function Home() {
     fetchFotos();
   }, []);
 
-  async function handleModalOpen(id: number) {
+  async function fetchComments(id: number) {
     const response = await fetch(`https://dogsapi.origamid.dev/json/api/comment/${id}`);
     const json = await response.json();
-    console.log(json);
     setComentarios(json);
   }
 
@@ -49,13 +48,13 @@ function Home() {
           <div key={fotoData.id} className={index === 1 ? "big-foto" : ""}>
             <Dialog.Root
               onOpenChange={() => {
-                handleModalOpen(fotoData.id);
+                fetchComments(fotoData.id);
               }}
             >
               <Dialog.Trigger asChild>
                 <img src={fotoData.src} alt={fotoData.title} />
               </Dialog.Trigger>
-              <PhotoModal fotoData={fotoData} comentarios={comentarios} />
+              <PhotoModal fotoData={fotoData} comentarios={comentarios} fetchComments={fetchComments} />
             </Dialog.Root>
           </div>
         ))}
@@ -65,7 +64,9 @@ function Home() {
 }
 
 const Wrapper = styled.div`
-  margin: 2rem 25%;
+  margin: 0 auto;
+  padding: 2rem;
+  max-width: 50rem;
   flex: 1;
 
   img {
@@ -89,6 +90,10 @@ const Grid = styled.div`
   .big-foto {
     grid-column: span 2;
     grid-row: span 2;
+
+    img {
+      height: 100%;
+    }
   }
 `;
 

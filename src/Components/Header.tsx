@@ -22,36 +22,45 @@ function Header() {
 
   return (
     <>
-      <Wrapper>
-        <div className="header-elements">
-          <Link to="/">
-            <img src={Dogs} alt="" />
-          </Link>
-        </div>
-        <div className="header-elements">
-          <Link to={route}>
-            {nameOrLogin}
-            <img src={Usuario} className="usuario-img" alt="" />
-          </Link>
-        </div>
-      </Wrapper>
-      {/* <hr /> */}
+      <Margin>
+        <Wrapper>
+          <div className="header-elements">
+            <Link to="/">
+              <img src={Dogs} alt="" />
+            </Link>
+          </div>
+          <div className="header-elements">
+            <Link to={route}>
+              {nameOrLogin}
+              <img src={Usuario} className="usuario-img" alt="" />
+            </Link>
+          </div>
+        </Wrapper>
+      </Margin>
     </>
   );
 }
 
-const Wrapper = styled.div`
-  padding: 0 25%;
-  height: 4rem;
-  z-index: 50;
-  background-color: hsl(0, 0%, 90%);
+const Margin = styled.div`
+  width: 100%;
   box-shadow: 0px 0px 20px 5px rgba(0, 0, 0, 0.2);
+  background-color: hsl(0, 0%, 90%);
 
   position: sticky;
   top: 0;
 
+  z-index: 50;
+`;
+
+const Wrapper = styled.div`
+  margin: 0 auto;
+  padding: 0 2rem;
+  max-width: 50rem;
+
   display: flex;
   justify-content: space-between;
+
+  height: 4rem;
 
   .header-elements {
     display: flex;

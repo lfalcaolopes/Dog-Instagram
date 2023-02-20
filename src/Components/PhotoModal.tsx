@@ -1,8 +1,10 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import styled from "styled-components";
-import { StyledTitle } from "./MyStyledComponents";
+import { StyledButton, StyledForm, StyledTitle } from "./MyStyledComponents";
 import Visualizacao from "../Assets/visualizacao-black.svg";
 import CommentsScroll from "./CommentsScroll";
+import { FormEvent, useContext, useRef } from "react";
+import { GlobalContext } from "../GlobalContext";
 
 interface fotos {
   id: number;
@@ -22,7 +24,34 @@ interface comentario {
   comment_id: string;
 }
 
-function PhotoModal({ fotoData, comentarios }: { fotoData: fotos; comentarios: comentario[] | undefined }) {
+interface props {
+  fotoData: fotos;
+  comentarios: comentario[] | undefined;
+  fetchComments: Function;
+}
+
+function PhotoModal({ fotoData, comentarios, fetchComments }: props) {
+  const userContext = useContext(GlobalContext);
+  const userComment = useRef<HTMLInputElement>(null);
+
+  async function handleSubmit(event: FormEvent, id: number) {
+    event.preventDefault();
+    const comment = userComment.current?.value;
+
+    const response = await fetch(`https://dogsapi.origamid.dev/json/api/comment/${id}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: "Bearer " + userContext?.dadosUser?.token },
+      body: JSON.stringify({ comment }),
+    });
+
+    const json = await response.json();
+
+    fetchComments(id);
+    if (userComment.current) userComment.current.value = "";
+
+    console.log(json);
+  }
+
   return (
     <Dialog.Portal>
       <Wrapper>
@@ -33,16 +62,30 @@ function PhotoModal({ fotoData, comentarios }: { fotoData: fotos; comentarios: c
               <img src={fotoData.src} alt="Image" />
             </div>
             <div className="data-side">
-              <div className="metadata">
-                <p>{`@${fotoData.author}`}</p>
-                <p>
-                  <img src={Visualizacao} alt="visu" />
-                  {`${fotoData.acessos}`}
-                </p>
+              <div className="non-form">
+                <div className="metadata">
+                  <p>{`@${fotoData.author}`}</p>
+                  <p>
+                    <img src={Visualizacao} alt="visu" />
+                    {`${fotoData.acessos}`}
+                  </p>
+                </div>
+                <StyledTitle>{fotoData.title}</StyledTitle>
+                <Dialog.Description className="dog-info">{`${fotoData.peso} Kg | ${fotoData.idade} Anos`}</Dialog.Description>
+                {comentarios && <CommentsScroll comentarios={comentarios} />}
               </div>
-              <StyledTitle>{fotoData.title}</StyledTitle>
-              <Dialog.Description className="dog-info">{`${fotoData.peso} Kg | ${fotoData.idade} Anos`}</Dialog.Description>
-              {comentarios && <CommentsScroll comentarios={comentarios} />}
+              {userContext?.dadosUser && (
+                <StyledForm
+                  onSubmit={(event) => {
+                    handleSubmit(event, fotoData.id);
+                  }}
+                >
+                  <label>
+                    <input placeholder="Comentário..." type="text" ref={userComment} />
+                  </label>
+                  <StyledButton>Enviar</StyledButton>
+                </StyledForm>
+              )}
             </div>
           </div>
         </Dialog.Content>
@@ -66,6 +109,8 @@ const Wrapper = styled.div`
     transform: translate(-50%, -50%);
     z-index: 101;
 
+    width: min(90vw, 60rem);
+
     background-color: white;
     border-radius: 5px;
     box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
@@ -79,16 +124,50 @@ const Wrapper = styled.div`
 
       img {
         width: 35rem;
+        height: 35rem;
       }
     }
 
     .data-side {
       margin: 2rem;
-      min-width: 15rem;
+      margin-bottom: 0rem;
+      min-width: 20rem;
       font-family: "Roboto", sans-serif;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
 
       h2 {
         margin-top: 1.5rem;
+      }
+
+      form {
+        display: flex;
+        justify-content: space-between;
+        align-self: end;
+
+        input {
+          box-shadow: none;
+          background-color: #dbdbdb;
+
+          margin-top: 0;
+
+          &:focus {
+            box-shadow: 0 0 0 3px #fea;
+          }
+        }
+
+        button {
+          box-shadow: none;
+          font-size: 1rem;
+          padding: 10px 10px;
+
+          &:focus,
+          &:hover {
+            box-shadow: 0 0 0 3px #fea;
+          }
+        }
       }
 
       .metadata {
@@ -104,9 +183,6 @@ const Wrapper = styled.div`
       .dog-info {
         font-size: 1.2rem;
         font-weight: bold;
-      }
-
-      .comentarios {
       }
     }
   }
