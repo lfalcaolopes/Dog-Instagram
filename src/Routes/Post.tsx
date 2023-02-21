@@ -1,19 +1,49 @@
-import { useRef } from "react";
+import { ChangeEvent, FormEvent, useContext, useRef, useState } from "react";
 import styled from "styled-components";
 import AccountHeader from "../Components/AccountHeader";
 import { StyledButton, StyledForm } from "../Components/MyStyledComponents";
+import { GlobalContext } from "../GlobalContext";
 
 function Post() {
   const nameRef = useRef<HTMLInputElement>(null);
   const weightRef = useRef<HTMLInputElement>(null);
   const ageRef = useRef<HTMLInputElement>(null);
-  const fileRef = useRef<HTMLInputElement>(null);
+  const [img, setImg] = useState<File>();
+  const userContext = useContext(GlobalContext);
+
+  async function postPhoto(event: FormEvent) {
+    event.preventDefault();
+    const formData = new FormData();
+
+    if (img && nameRef.current && weightRef.current && ageRef.current) {
+      formData.append("img", img);
+      formData.append("nome", nameRef.current.value);
+      formData.append("peso", weightRef.current.value);
+      formData.append("idade", ageRef.current.value);
+    }
+
+    const response = await fetch("https://dogsapi.origamid.dev/json/api/photo", {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + userContext?.dadosUser?.token,
+      },
+      body: formData,
+    });
+
+    const json = response.json();
+
+    console.log(json);
+  }
+
+  function handleChange(event: ChangeEvent<HTMLInputElement>) {
+    setImg(event.target.files![0]);
+  }
 
   return (
     <Margin>
       <Wrapper>
         <AccountHeader titleText="Poste Sua Foto" />
-        <StyledForm>
+        <StyledForm onSubmit={postPhoto}>
           <label>
             <p>Nome</p>
             <div className="input-hover">
@@ -28,7 +58,7 @@ function Post() {
             <p>Idade</p>
             <input type="text" ref={ageRef} size={40} />
           </label>
-          <input type="file" ref={fileRef} />
+          <input type="file" onChange={handleChange} />
           <StyledButton>Enviar</StyledButton>
         </StyledForm>
       </Wrapper>

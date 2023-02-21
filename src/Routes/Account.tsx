@@ -1,7 +1,23 @@
+import { useContext, useState } from "react";
 import styled from "styled-components";
 import AccountHeader from "../Components/AccountHeader";
+import { GlobalContext } from "../GlobalContext";
 
 function Account() {
+  const userContext = useContext(GlobalContext);
+  const [id, setId] = useState<number>();
+
+  async function fetchUserPosts() {
+    const responseUser = await fetch(`https://dogsapi.origamid.dev/json/api/user`, {
+      headers: {
+        Authorization: `Bearer ${userContext?.dadosUser?.token}`,
+      },
+    });
+
+    const jsonUser = await responseUser.json();
+    setId(jsonUser.id);
+  }
+
   return (
     <Margin>
       <Wrapper>
