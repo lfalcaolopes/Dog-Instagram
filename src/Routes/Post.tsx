@@ -1,4 +1,5 @@
 import { ChangeEvent, FormEvent, useContext, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import AccountHeader from "../Components/AccountHeader";
 import { StyledButton, StyledForm } from "../Components/MyStyledComponents";
@@ -11,6 +12,8 @@ function Post() {
   const [img, setImg] = useState<File>();
   const userContext = useContext(GlobalContext);
 
+  const navigate = useNavigate();
+
   async function postPhoto(event: FormEvent) {
     event.preventDefault();
     const formData = new FormData();
@@ -22,7 +25,7 @@ function Post() {
       formData.append("idade", ageRef.current.value);
     }
 
-    const response = await fetch("https://dogsapi.origamid.dev/json/api/photo", {
+    await fetch("https://dogsapi.origamid.dev/json/api/photo", {
       method: "POST",
       headers: {
         Authorization: "Bearer " + userContext?.dadosUser?.token,
@@ -30,9 +33,7 @@ function Post() {
       body: formData,
     });
 
-    const json = response.json();
-
-    console.log(json);
+    navigate("/conta/geral");
   }
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
@@ -43,24 +44,27 @@ function Post() {
     <Margin>
       <Wrapper>
         <AccountHeader titleText="Poste Sua Foto" />
-        <StyledForm onSubmit={postPhoto}>
-          <label>
-            <p>Nome</p>
-            <div className="input-hover">
-              <input type="text" ref={nameRef} size={40} />
-            </div>
-          </label>
-          <label>
-            <p>Peso</p>
-            <input type="text" ref={weightRef} size={40} />
-          </label>
-          <label>
-            <p>Idade</p>
-            <input type="text" ref={ageRef} size={40} />
-          </label>
-          <input type="file" onChange={handleChange} />
-          <StyledButton>Enviar</StyledButton>
-        </StyledForm>
+        <div className="grid">
+          <StyledForm onSubmit={postPhoto}>
+            <label>
+              <p>Nome</p>
+              <div className="input-hover">
+                <input type="text" ref={nameRef} size={40} />
+              </div>
+            </label>
+            <label>
+              <p>Peso</p>
+              <input type="text" ref={weightRef} size={40} />
+            </label>
+            <label>
+              <p>Idade</p>
+              <input type="text" ref={ageRef} size={40} />
+            </label>
+            <input type="file" onChange={handleChange} />
+            <StyledButton>Enviar</StyledButton>
+          </StyledForm>
+          <div className="img-side">{img && <img src={URL.createObjectURL(img)} />}</div>
+        </div>
       </Wrapper>
     </Margin>
   );
@@ -75,8 +79,27 @@ const Wrapper = styled.div`
   padding: 0 2rem;
   margin: 0 auto;
 
-  form {
-    margin-top: 2rem;
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3rem;
+
+    form {
+      margin-top: 2rem;
+    }
+
+    .img-side {
+      height: 23rem;
+      width: 23rem;
+      img {
+        margin-top: 2rem;
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+
+        border-radius: 10px;
+      }
+    }
   }
 `;
 

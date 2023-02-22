@@ -38,9 +38,6 @@ function AccountHeader({ titleText }: props) {
         <NavLink to="/conta/geral" onClick={handleClick}>
           {({ isActive }: { isActive: boolean }) => <Feed fill={isActive ? "#fb1" : ""} />}
         </NavLink>
-        <NavLink to="/conta/estatisticas" onClick={handleClick}>
-          {({ isActive }: { isActive: boolean }) => <Estatisticas fill={isActive ? "#fb1" : ""} />}
-        </NavLink>
         <NavLink to="/conta/postar" onClick={handleClick}>
           {({ isActive }: { isActive: boolean }) => <Adicionar fill={isActive ? "#fb1" : ""} />}
         </NavLink>

@@ -21,7 +21,7 @@ function App() {
             <Route path="login" element={<Login />} />
             <Route path="login/criar" element={<SingUp />} />
             <Route path="conta/geral" element={<Account />} />
-            <Route path="conta/estatisticas" element={<Statistics />} />
+            {/* <Route path="conta/estatisticas" element={<Statistics />} /> */}
             <Route path="conta/postar" element={<Post />} />
           </Routes>
           <Footer />

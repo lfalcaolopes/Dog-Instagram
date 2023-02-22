@@ -108,7 +108,7 @@ const StyledAccountButtons = styled.div`
   margin: 3rem 0 1.5rem;
 
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
 
   a {

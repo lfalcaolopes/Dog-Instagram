@@ -25,7 +25,15 @@ function Login() {
 
     const json = await response.json();
 
-    userContext?.setDadosUser(json);
+    const responseUser = await fetch(`https://dogsapi.origamid.dev/json/api/user`, {
+      headers: {
+        Authorization: `Bearer ${json.token}`,
+      },
+    });
+
+    const jsonUser = await responseUser.json();
+
+    userContext?.setDadosUser({ ...json, id: jsonUser.id });
 
     navigate("/conta/geral");
   }

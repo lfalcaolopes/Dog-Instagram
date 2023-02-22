@@ -1,28 +1,54 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import AccountHeader from "../Components/AccountHeader";
-import { GlobalContext } from "../GlobalContext";
+import PhotosStack from "../Components/PhotosStack";
 
 function Account() {
-  const userContext = useContext(GlobalContext);
-  const [id, setId] = useState<number>();
+  const [pages, setPages] = useState([1]);
+  const [infinite, setInfinite] = useState(true);
 
-  async function fetchUserPosts() {
-    const responseUser = await fetch(`https://dogsapi.origamid.dev/json/api/user`, {
-      headers: {
-        Authorization: `Bearer ${userContext?.dadosUser?.token}`,
-      },
-    });
+  useEffect(() => {
+    let wait = false;
+    function infiniteScroll() {
+      if (infinite) {
+        const scroll = window.scrollY;
+        const height = document.body.offsetHeight - window.innerHeight;
+        if (scroll > height * 0.75 && !wait) {
+          setPages((pages) => [...pages, pages.length + 1]);
+          wait = true;
+          setTimeout(() => {
+            wait = false;
+          }, 500);
+        }
+      }
+    }
 
-    const jsonUser = await responseUser.json();
-    setId(jsonUser.id);
-  }
+    window.addEventListener("wheel", infiniteScroll);
+    window.addEventListener("scroll", infiniteScroll);
+    return () => {
+      window.removeEventListener("wheel", infiniteScroll);
+      window.removeEventListener("scroll", infiniteScroll);
+    };
+  }, [infinite]);
 
   return (
     <Margin>
       <Wrapper>
         <AccountHeader titleText="Minha Conta" />
-        <h1>account</h1>
+        {pages.map((page) => (
+          <PhotosStack key={page} page={page} setInfinite={setInfinite} />
+        ))}
+        {!infinite && (
+          <p
+            style={{
+              textAlign: "center",
+              padding: "6rem 0 4rem 0",
+              color: "#888",
+            }}
+          >
+            Conta não possui mais postagens.
+          </p>
+        )}
       </Wrapper>
     </Margin>
   );

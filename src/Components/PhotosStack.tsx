@@ -1,6 +1,8 @@
 import * as Dialog from "@radix-ui/react-dialog";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
+import { GlobalContext } from "../GlobalContext";
 import PhotoModal from "./PhotoModal";
 
 interface fotos {
@@ -22,12 +24,21 @@ interface comentario {
 }
 
 function PhotosStack({ page, setInfinite }: { page: number; setInfinite: Function }) {
+  const userContext = useContext(GlobalContext);
   const [fotos, setFotos] = useState<fotos[]>();
   const [comentarios, setComentarios] = useState<comentario[]>();
+  const location = useLocation();
 
   useEffect(() => {
-    async function fetchFotos(page: number) {
-      const response = await fetch(`https://dogsapi.origamid.dev/json/api/photo/?_total=6&_page=${page}&_user=0`, {
+    let url: string;
+    if (userContext?.dadosUser && location.pathname == "/conta/geral") {
+      url = `https://dogsapi.origamid.dev/json/api/photo/?_total=6&_page=${page}&_user=${userContext.dadosUser?.id}`;
+    } else {
+      url = `https://dogsapi.origamid.dev/json/api/photo/?_total=6&_page=${page}&_user=0`;
+    }
+
+    async function fetchFotos() {
+      const response = await fetch(url, {
         cache: "no-store",
       });
       const json = await response.json();
@@ -36,8 +47,8 @@ function PhotosStack({ page, setInfinite }: { page: number; setInfinite: Functio
       if (json.length < 6) setInfinite(false);
     }
 
-    fetchFotos(page);
-  });
+    fetchFotos();
+  }, []);
 
   async function fetchComments(id: number) {
     const response = await fetch(`https://dogsapi.origamid.dev/json/api/comment/${id}`);
