@@ -1,4 +1,4 @@
-import { FormEvent, useContext, useRef } from "react";
+import { FormEvent, useContext, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import dogHat from "../Assets/login.jpg";
@@ -9,6 +9,7 @@ function Login() {
   const userContext = useContext(GlobalContext);
   const user = useRef<HTMLInputElement>(null);
   const pass = useRef<HTMLInputElement>(null);
+  const [isMissing, setIsMissing] = useState(false);
 
   const navigate = useNavigate();
 
@@ -17,25 +18,30 @@ function Login() {
     const username = user.current?.value;
     const password = pass.current?.value;
 
-    const response = await fetch(`https://dogsapi.origamid.dev/json/jwt-auth/v1/token`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    });
+    if (username !== "" && password !== "") {
+      setIsMissing(false);
+      const response = await fetch(`https://dogsapi.origamid.dev/json/jwt-auth/v1/token`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
 
-    const json = await response.json();
+      const json = await response.json();
 
-    const responseUser = await fetch(`https://dogsapi.origamid.dev/json/api/user`, {
-      headers: {
-        Authorization: `Bearer ${json.token}`,
-      },
-    });
+      const responseUser = await fetch(`https://dogsapi.origamid.dev/json/api/user`, {
+        headers: {
+          Authorization: `Bearer ${json.token}`,
+        },
+      });
 
-    const jsonUser = await responseUser.json();
+      const jsonUser = await responseUser.json();
 
-    userContext?.setDadosUser({ ...json, id: jsonUser.id });
+      userContext?.setDadosUser({ ...json, id: jsonUser.id });
 
-    navigate("/conta/geral");
+      navigate("/conta/geral");
+    } else {
+      setIsMissing(true);
+    }
   }
 
   return (
@@ -55,6 +61,17 @@ function Login() {
               <p>Senha</p>
               <input type="password" ref={pass} size={40} />
             </label>
+            {isMissing && (
+              <p
+                style={{
+                  fontSize: "1rem",
+                  textAlign: "center",
+                  color: "#db0000",
+                }}
+              >
+                Preencha todos os campos.
+              </p>
+            )}
             <StyledButton>Entrar</StyledButton>
           </StyledForm>
 

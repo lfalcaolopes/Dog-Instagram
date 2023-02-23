@@ -1,4 +1,4 @@
-import { FormEvent, useRef } from "react";
+import { FormEvent, useRef, useState } from "react";
 import styled from "styled-components";
 import dogHat from "../Assets/login.jpg";
 import { StyledForm, StyledTitle, StyledButton } from "../Components/MyStyledComponents";
@@ -7,6 +7,7 @@ function SingUp() {
   const userRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const passRef = useRef<HTMLInputElement>(null);
+  const [isMissing, setIsMissing] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -14,15 +15,16 @@ function SingUp() {
     const email = emailRef.current?.value;
     const password = passRef.current?.value;
 
-    const response = await fetch(`https://dogsapi.origamid.dev/json/api/user`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password, email }),
-    });
-
-    const json = await response.json();
-
-    console.log(json);
+    if (username !== "" && email !== "" && password !== "") {
+      setIsMissing(false);
+      await fetch(`https://dogsapi.origamid.dev/json/api/user`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password, email }),
+      });
+    } else {
+      setIsMissing(true);
+    }
   }
 
   return (
@@ -45,6 +47,17 @@ function SingUp() {
             <p>Senha</p>
             <input type="text" ref={passRef} size={40} />
           </label>
+          {isMissing && (
+            <p
+              style={{
+                fontSize: "1rem",
+                textAlign: "center",
+                color: "#db0000",
+              }}
+            >
+              Preencha todos os campos.
+            </p>
+          )}
           <StyledButton>Cadastrar</StyledButton>
         </StyledForm>
       </div>

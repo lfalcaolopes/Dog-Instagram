@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { GlobalContext } from "../GlobalContext";
+import useFetch from "../Hooks/useFetch";
 import PhotoModal from "./PhotoModal";
 
 interface fotos {
@@ -25,30 +26,54 @@ interface comentario {
 
 function PhotosStack({ page, setInfinite }: { page: number; setInfinite: Function }) {
   const userContext = useContext(GlobalContext);
-  const [fotos, setFotos] = useState<fotos[]>();
+  const [fotos, setFotos] = useState<fotos[] | null>();
   const [comentarios, setComentarios] = useState<comentario[]>();
   const location = useLocation();
+  let url: string;
+  if (userContext?.dadosUser && location.pathname == "/conta/geral") {
+    url = `https://dogsapi.origamid.dev/json/api/photo/?_total=6&_page=${page}&_user=${userContext.dadosUser?.id}`;
+  } else {
+    url = `https://dogsapi.origamid.dev/json/api/photo/?_total=6&_page=${page}&_user=0`;
+  }
+
+  // const { data, error, loading, response } = useFetch<fotos[]>(url, {
+  //   cache: "no-store",
+  // });
+
+  // setFotos(data);
 
   useEffect(() => {
-    let url: string;
-    if (userContext?.dadosUser && location.pathname == "/conta/geral") {
-      url = `https://dogsapi.origamid.dev/json/api/photo/?_total=6&_page=${page}&_user=${userContext.dadosUser?.id}`;
-    } else {
-      url = `https://dogsapi.origamid.dev/json/api/photo/?_total=6&_page=${page}&_user=0`;
-    }
+    const { data, error, loading, response } = useFetch<fotos[]>("https://api.example.com/users", {
+      cache: "no-store",
+    });
 
-    async function fetchFotos() {
-      const response = await fetch(url, {
-        cache: "no-store",
-      });
-      const json = await response.json();
-      setFotos(json);
-
-      if (json.length < 6) setInfinite(false);
-    }
-
-    fetchFotos();
+    setFotos(data);
   }, []);
+
+  // useEffect(() => {
+  //   async function fetchFotos() {
+  //     let url: string;
+  //     if (userContext?.dadosUser && location.pathname == "/conta/geral") {
+  //       url = `https://dogsapi.origamid.dev/json/api/photo/?_total=6&_page=${page}&_user=${userContext.dadosUser?.id}`;
+  //     } else {
+  //       url = `https://dogsapi.origamid.dev/json/api/photo/?_total=6&_page=${page}&_user=0`;
+  //     }
+  //     const response = await fetch(url, {
+  //       cache: "no-store",
+  //     });
+
+  //     const json = await response.json();
+  //     setFotos(json);
+  //   }
+
+  //   fetchFotos();
+  // }, []);
+
+  // const { data, error } = useFetch<fotos[]>(url, {
+  //   cache: "no-store",
+  // });
+
+  // setFotos(data);
 
   async function fetchComments(id: number) {
     const response = await fetch(`https://dogsapi.origamid.dev/json/api/comment/${id}`);

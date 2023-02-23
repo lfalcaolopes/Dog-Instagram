@@ -10,6 +10,7 @@ function Post() {
   const weightRef = useRef<HTMLInputElement>(null);
   const ageRef = useRef<HTMLInputElement>(null);
   const [img, setImg] = useState<File>();
+  const [isMissing, setIsMissing] = useState(false);
   const userContext = useContext(GlobalContext);
 
   const navigate = useNavigate();
@@ -18,22 +19,25 @@ function Post() {
     event.preventDefault();
     const formData = new FormData();
 
-    if (img && nameRef.current && weightRef.current && ageRef.current) {
+    if (img && nameRef.current?.value !== "" && weightRef.current?.value !== "" && ageRef.current?.value !== "") {
+      setIsMissing(false);
       formData.append("img", img);
-      formData.append("nome", nameRef.current.value);
-      formData.append("peso", weightRef.current.value);
-      formData.append("idade", ageRef.current.value);
+      formData.append("nome", nameRef.current!.value);
+      formData.append("peso", weightRef.current!.value);
+      formData.append("idade", ageRef.current!.value);
+
+      await fetch("https://dogsapi.origamid.dev/json/api/photo", {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer " + userContext?.dadosUser?.token,
+        },
+        body: formData,
+      });
+
+      navigate("/conta/geral");
+    } else {
+      setIsMissing(true);
     }
-
-    await fetch("https://dogsapi.origamid.dev/json/api/photo", {
-      method: "POST",
-      headers: {
-        Authorization: "Bearer " + userContext?.dadosUser?.token,
-      },
-      body: formData,
-    });
-
-    navigate("/conta/geral");
   }
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
@@ -61,6 +65,16 @@ function Post() {
               <input type="text" ref={ageRef} size={40} />
             </label>
             <input type="file" onChange={handleChange} />
+            {isMissing && (
+              <p
+                style={{
+                  textAlign: "center",
+                  color: "#db0000",
+                }}
+              >
+                Preencha todos os campos.
+              </p>
+            )}
             <StyledButton>Enviar</StyledButton>
           </StyledForm>
           <div className="img-side">{img && <img src={URL.createObjectURL(img)} />}</div>

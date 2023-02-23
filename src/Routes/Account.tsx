@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import AccountHeader from "../Components/AccountHeader";
 import PhotosStack from "../Components/PhotosStack";
