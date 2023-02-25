@@ -11,6 +11,7 @@ function Post() {
   const ageRef = useRef<HTMLInputElement>(null);
   const [img, setImg] = useState<File>();
   const [isMissing, setIsMissing] = useState(false);
+  const [loading, setLoading] = useState(false);
   const userContext = useContext(GlobalContext);
 
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ function Post() {
 
     if (img && nameRef.current?.value !== "" && weightRef.current?.value !== "" && ageRef.current?.value !== "") {
       setIsMissing(false);
+      setLoading(true);
       formData.append("img", img);
       formData.append("nome", nameRef.current!.value);
       formData.append("peso", weightRef.current!.value);
@@ -34,6 +36,7 @@ function Post() {
         body: formData,
       });
 
+      setLoading(false);
       navigate("/conta/geral");
     } else {
       setIsMissing(true);
@@ -75,7 +78,7 @@ function Post() {
                 Preencha todos os campos.
               </p>
             )}
-            <StyledButton>Enviar</StyledButton>
+            <StyledButton loading={loading}>{loading ? "Carregando" : "Enviar"}</StyledButton>
           </StyledForm>
           <div className="img-side">{img && <img src={URL.createObjectURL(img)} />}</div>
         </div>

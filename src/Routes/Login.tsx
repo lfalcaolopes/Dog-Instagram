@@ -10,6 +10,7 @@ function Login() {
   const user = useRef<HTMLInputElement>(null);
   const pass = useRef<HTMLInputElement>(null);
   const [isMissing, setIsMissing] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -20,6 +21,7 @@ function Login() {
 
     if (username !== "" && password !== "") {
       setIsMissing(false);
+      setLoading(true);
       const response = await fetch(`https://dogsapi.origamid.dev/json/jwt-auth/v1/token`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -38,6 +40,7 @@ function Login() {
 
       userContext?.setDadosUser({ ...json, id: jsonUser.id });
 
+      setLoading(false);
       navigate("/conta/geral");
     } else {
       setIsMissing(true);
@@ -72,7 +75,7 @@ function Login() {
                 Preencha todos os campos.
               </p>
             )}
-            <StyledButton>Entrar</StyledButton>
+            <StyledButton loading={loading}>{loading ? "Carregando" : "Entrar"}</StyledButton>
           </StyledForm>
 
           <a href="#">Perdeu a Senha?</a>

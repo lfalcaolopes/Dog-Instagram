@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { StyledButton, StyledForm, StyledTitle } from "./MyStyledComponents";
 import Visualizacao from "../Assets/visualizacao-black.svg";
 import CommentsScroll from "./CommentsScroll";
-import { FormEvent, useContext, useRef } from "react";
+import { FormEvent, useContext, useRef, useState } from "react";
 import { GlobalContext } from "../GlobalContext";
 
 interface fotos {
@@ -33,23 +33,24 @@ interface props {
 function PhotoModal({ fotoData, comentarios, fetchComments }: props) {
   const userContext = useContext(GlobalContext);
   const userComment = useRef<HTMLInputElement>(null);
+  const [loading, setLoading] = useState(false);
 
   async function handleSubmit(event: FormEvent, id: number) {
     event.preventDefault();
     const comment = userComment.current?.value;
 
-    const response = await fetch(`https://dogsapi.origamid.dev/json/api/comment/${id}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: "Bearer " + userContext?.dadosUser?.token },
-      body: JSON.stringify({ comment }),
-    });
+    if (comment !== "") {
+      setLoading(true);
+      await fetch(`https://dogsapi.origamid.dev/json/api/comment/${id}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: "Bearer " + userContext?.dadosUser?.token },
+        body: JSON.stringify({ comment }),
+      });
 
-    const json = await response.json();
-
-    fetchComments(id);
-    if (userComment.current) userComment.current.value = "";
-
-    console.log(json);
+      fetchComments(id);
+      if (userComment.current) userComment.current.value = "";
+      setLoading(false);
+    }
   }
 
   return (
@@ -83,7 +84,7 @@ function PhotoModal({ fotoData, comentarios, fetchComments }: props) {
                   <label>
                     <input placeholder="Comentário..." type="text" ref={userComment} />
                   </label>
-                  <StyledButton>Enviar</StyledButton>
+                  <StyledButton loading={loading}>Enviar</StyledButton>
                 </StyledForm>
               )}
             </div>

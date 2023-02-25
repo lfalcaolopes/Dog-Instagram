@@ -8,6 +8,7 @@ function SingUp() {
   const emailRef = useRef<HTMLInputElement>(null);
   const passRef = useRef<HTMLInputElement>(null);
   const [isMissing, setIsMissing] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -16,12 +17,14 @@ function SingUp() {
     const password = passRef.current?.value;
 
     if (username !== "" && email !== "" && password !== "") {
+      setLoading(true);
       setIsMissing(false);
       await fetch(`https://dogsapi.origamid.dev/json/api/user`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password, email }),
       });
+      setLoading(false);
     } else {
       setIsMissing(true);
     }
@@ -58,7 +61,7 @@ function SingUp() {
               Preencha todos os campos.
             </p>
           )}
-          <StyledButton>Cadastrar</StyledButton>
+          <StyledButton loading={loading}>{loading ? "Carregando" : "Cadastrar"}</StyledButton>
         </StyledForm>
       </div>
     </Wrapper>

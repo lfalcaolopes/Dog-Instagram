@@ -55,7 +55,7 @@ const StyledTitle = styled.h2`
   }
 `;
 
-const StyledButton = styled.button`
+const StyledButton = styled.button<{ loading?: boolean }>`
   display: block;
   background-color: #fb1;
   font-size: 1.2rem;
@@ -67,6 +67,14 @@ const StyledButton = styled.button`
   z-index: 0;
   transition-duration: 0.3s;
   transition-property: box-shadow;
+
+  ${(props) =>
+    props.loading &&
+    `
+    background-color: #ffbc117e;
+    cursor: not-allowed;
+    padding: 10px;
+  `}
 
   position: relative;
 
@@ -82,6 +90,12 @@ const StyledButton = styled.button`
 
     transition-duration: 0.3s;
     transition-property: top, right, bottom, left;
+
+    ${(props) =>
+      props.loading &&
+      `
+      border-color: #ffbc117e;
+     `}
   }
 
   &:hover:before,
@@ -94,6 +108,15 @@ const StyledButton = styled.button`
     right: -4px;
     bottom: -4px;
     left: -4px;
+
+    ${(props) =>
+      props.loading &&
+      `
+      top: 0px;
+      right: 0px;
+      bottom: 0px;
+      left: 0px;
+    `}
   }
 
   &:hover,
@@ -101,6 +124,12 @@ const StyledButton = styled.button`
   &:active {
     outline: none;
     box-shadow: none;
+
+    ${(props) =>
+      props.loading &&
+      `
+      box-shadow: 2px 3px 10px #666666;
+    `}
   }
 `;
 
