@@ -1,14 +1,17 @@
 import { FormEvent, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import dogHat from "../Assets/login.jpg";
 import { StyledForm, StyledTitle, StyledButton } from "../Components/MyStyledComponents";
+import useFetch from "../Hooks/useFetch";
 
 function SingUp() {
   const userRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const passRef = useRef<HTMLInputElement>(null);
+  const { error, loading, request } = useFetch();
   const [isMissing, setIsMissing] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -17,14 +20,13 @@ function SingUp() {
     const password = passRef.current?.value;
 
     if (username !== "" && email !== "" && password !== "") {
-      setLoading(true);
       setIsMissing(false);
-      await fetch(`https://dogsapi.origamid.dev/json/api/user`, {
+      const { response } = await request(`https://dogsapi.origamid.dev/json/api/user`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password, email }),
       });
-      setLoading(false);
+      if (response?.ok) navigate("/login");
     } else {
       setIsMissing(true);
     }
@@ -44,13 +46,13 @@ function SingUp() {
           </label>
           <label>
             <p>Email</p>
-            <input type="text" ref={emailRef} size={40} />
+            <input type="email" ref={emailRef} size={40} />
           </label>
           <label>
             <p>Senha</p>
             <input type="text" ref={passRef} size={40} />
           </label>
-          {isMissing && (
+          {(isMissing || error) && (
             <p
               style={{
                 fontSize: "1rem",
@@ -58,10 +60,14 @@ function SingUp() {
                 color: "#db0000",
               }}
             >
-              Preencha todos os campos.
+              {isMissing ? (
+                "Preencha todos os campos."
+              ) : (
+                <span dangerouslySetInnerHTML={{ __html: error!.message }}></span>
+              )}
             </p>
           )}
-          <StyledButton loading={loading}>{loading ? "Carregando" : "Cadastrar"}</StyledButton>
+          <StyledButton dloading={loading}>{loading ? "Carregando" : "Cadastrar"}</StyledButton>
         </StyledForm>
       </div>
     </Wrapper>

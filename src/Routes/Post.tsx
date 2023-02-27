@@ -4,6 +4,7 @@ import styled from "styled-components";
 import AccountHeader from "../Components/AccountHeader";
 import { StyledButton, StyledForm } from "../Components/MyStyledComponents";
 import { GlobalContext } from "../GlobalContext";
+import useFetch from "../Hooks/useFetch";
 
 function Post() {
   const nameRef = useRef<HTMLInputElement>(null);
@@ -11,7 +12,7 @@ function Post() {
   const ageRef = useRef<HTMLInputElement>(null);
   const [img, setImg] = useState<File>();
   const [isMissing, setIsMissing] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const { loading, error, request } = useFetch();
   const userContext = useContext(GlobalContext);
 
   const navigate = useNavigate();
@@ -22,13 +23,12 @@ function Post() {
 
     if (img && nameRef.current?.value !== "" && weightRef.current?.value !== "" && ageRef.current?.value !== "") {
       setIsMissing(false);
-      setLoading(true);
       formData.append("img", img);
       formData.append("nome", nameRef.current!.value);
       formData.append("peso", weightRef.current!.value);
       formData.append("idade", ageRef.current!.value);
 
-      await fetch("https://dogsapi.origamid.dev/json/api/photo", {
+      const { response } = await request("https://dogsapi.origamid.dev/json/api/photo", {
         method: "POST",
         headers: {
           Authorization: "Bearer " + userContext?.dadosUser?.token,
@@ -36,8 +36,7 @@ function Post() {
         body: formData,
       });
 
-      setLoading(false);
-      navigate("/conta/geral");
+      if (response?.ok) navigate("/conta/geral");
     } else {
       setIsMissing(true);
     }
@@ -68,17 +67,22 @@ function Post() {
               <input type="text" ref={ageRef} size={40} />
             </label>
             <input type="file" onChange={handleChange} />
-            {isMissing && (
+            {(isMissing || error) && (
               <p
                 style={{
+                  fontSize: "1rem",
                   textAlign: "center",
                   color: "#db0000",
                 }}
               >
-                Preencha todos os campos.
+                {isMissing ? (
+                  "Preencha todos os campos."
+                ) : (
+                  <span dangerouslySetInnerHTML={{ __html: error!.message }}></span>
+                )}
               </p>
             )}
-            <StyledButton loading={loading}>{loading ? "Carregando" : "Enviar"}</StyledButton>
+            <StyledButton dloading={loading}>{loading ? "Carregando" : "Enviar"}</StyledButton>
           </StyledForm>
           <div className="img-side">{img && <img src={URL.createObjectURL(img)} />}</div>
         </div>

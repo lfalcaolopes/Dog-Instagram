@@ -55,7 +55,7 @@ const StyledTitle = styled.h2`
   }
 `;
 
-const StyledButton = styled.button<{ loading?: boolean }>`
+const StyledButton = styled.button<{ dloading?: boolean }>`
   display: block;
   background-color: #fb1;
   font-size: 1.2rem;
@@ -69,7 +69,7 @@ const StyledButton = styled.button<{ loading?: boolean }>`
   transition-property: box-shadow;
 
   ${(props) =>
-    props.loading &&
+    props.dloading &&
     `
     background-color: #ffbc117e;
     cursor: not-allowed;
@@ -92,7 +92,7 @@ const StyledButton = styled.button<{ loading?: boolean }>`
     transition-property: top, right, bottom, left;
 
     ${(props) =>
-      props.loading &&
+      props.dloading &&
       `
       border-color: #ffbc117e;
      `}
@@ -110,7 +110,7 @@ const StyledButton = styled.button<{ loading?: boolean }>`
     left: -4px;
 
     ${(props) =>
-      props.loading &&
+      props.dloading &&
       `
       top: 0px;
       right: 0px;
@@ -126,7 +126,7 @@ const StyledButton = styled.button<{ loading?: boolean }>`
     box-shadow: none;
 
     ${(props) =>
-      props.loading &&
+      props.dloading &&
       `
       box-shadow: 2px 3px 10px #666666;
     `}

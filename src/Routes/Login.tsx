@@ -4,11 +4,20 @@ import styled from "styled-components";
 import dogHat from "../Assets/login.jpg";
 import { StyledForm, StyledTitle, StyledButton } from "../Components/MyStyledComponents";
 import { GlobalContext } from "../GlobalContext";
+import useFetch from "../Hooks/useFetch";
+
+interface userData {
+  token: string;
+  user_display_name: string;
+  user_email: string;
+  user_nicename: string;
+}
 
 function Login() {
   const userContext = useContext(GlobalContext);
   const user = useRef<HTMLInputElement>(null);
   const pass = useRef<HTMLInputElement>(null);
+  const { error, request } = useFetch<userData>();
   const [isMissing, setIsMissing] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -22,26 +31,26 @@ function Login() {
     if (username !== "" && password !== "") {
       setIsMissing(false);
       setLoading(true);
-      const response = await fetch(`https://dogsapi.origamid.dev/json/jwt-auth/v1/token`, {
+      const { json, response } = await request(`https://dogsapi.origamid.dev/json/jwt-auth/v1/token`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       });
 
-      const json = await response.json();
+      if (response?.ok) {
+        const responseUser = await fetch(`https://dogsapi.origamid.dev/json/api/user`, {
+          headers: {
+            Authorization: `Bearer ${json?.token}`,
+          },
+        });
 
-      const responseUser = await fetch(`https://dogsapi.origamid.dev/json/api/user`, {
-        headers: {
-          Authorization: `Bearer ${json.token}`,
-        },
-      });
+        const jsonUser = await responseUser.json();
 
-      const jsonUser = await responseUser.json();
+        userContext?.setDadosUser({ ...json, id: jsonUser.id });
 
-      userContext?.setDadosUser({ ...json, id: jsonUser.id });
-
+        navigate("/conta/geral");
+      }
       setLoading(false);
-      navigate("/conta/geral");
     } else {
       setIsMissing(true);
     }
@@ -64,7 +73,7 @@ function Login() {
               <p>Senha</p>
               <input type="password" ref={pass} size={40} />
             </label>
-            {isMissing && (
+            {(isMissing || error) && (
               <p
                 style={{
                   fontSize: "1rem",
@@ -72,10 +81,10 @@ function Login() {
                   color: "#db0000",
                 }}
               >
-                Preencha todos os campos.
+                {isMissing ? "Preencha todos os campos." : "Dados incorretos."}
               </p>
             )}
-            <StyledButton loading={loading}>{loading ? "Carregando" : "Entrar"}</StyledButton>
+            <StyledButton dloading={loading}>{loading ? "Carregando" : "Entrar"}</StyledButton>
           </StyledForm>
 
           <a href="#">Perdeu a Senha?</a>

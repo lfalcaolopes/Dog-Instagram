@@ -5,6 +5,7 @@ import Visualizacao from "../Assets/visualizacao-black.svg";
 import CommentsScroll from "./CommentsScroll";
 import { FormEvent, useContext, useRef, useState } from "react";
 import { GlobalContext } from "../GlobalContext";
+import useFetch from "../Hooks/useFetch";
 
 interface fotos {
   id: number;
@@ -33,15 +34,14 @@ interface props {
 function PhotoModal({ fotoData, comentarios, fetchComments }: props) {
   const userContext = useContext(GlobalContext);
   const userComment = useRef<HTMLInputElement>(null);
-  const [loading, setLoading] = useState(false);
+  const { loading, request } = useFetch();
 
   async function handleSubmit(event: FormEvent, id: number) {
     event.preventDefault();
     const comment = userComment.current?.value;
 
     if (comment !== "") {
-      setLoading(true);
-      await fetch(`https://dogsapi.origamid.dev/json/api/comment/${id}`, {
+      await request(`https://dogsapi.origamid.dev/json/api/comment/${id}`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: "Bearer " + userContext?.dadosUser?.token },
         body: JSON.stringify({ comment }),
@@ -49,7 +49,6 @@ function PhotoModal({ fotoData, comentarios, fetchComments }: props) {
 
       fetchComments(id);
       if (userComment.current) userComment.current.value = "";
-      setLoading(false);
     }
   }
 
@@ -84,7 +83,7 @@ function PhotoModal({ fotoData, comentarios, fetchComments }: props) {
                   <label>
                     <input placeholder="Comentário..." type="text" ref={userComment} />
                   </label>
-                  <StyledButton loading={loading}>Enviar</StyledButton>
+                  <StyledButton dloading={loading}>Enviar</StyledButton>
                 </StyledForm>
               )}
             </div>

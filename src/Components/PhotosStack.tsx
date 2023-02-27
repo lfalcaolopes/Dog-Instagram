@@ -27,6 +27,7 @@ interface comentario {
 
 function PhotosStack({ page, setInfinite }: { page: number; setInfinite: Function }) {
   const userContext = useContext(GlobalContext);
+  const { data, loading, error, request } = useFetch<fotos[]>();
   const [comentarios, setComentarios] = useState<comentario[]>();
   const location = useLocation();
 
@@ -37,9 +38,9 @@ function PhotosStack({ page, setInfinite }: { page: number; setInfinite: Functio
     url = `https://dogsapi.origamid.dev/json/api/photo/?_total=6&_page=${page}&_user=0`;
   }
 
-  const { data, error } = useFetch<fotos[]>(url, {
-    cache: "no-store",
-  });
+  useEffect(() => {
+    request(url, { cache: "no-store" });
+  }, [url]);
 
   if (data && data.length < 6) setInfinite(false);
 
@@ -50,7 +51,7 @@ function PhotosStack({ page, setInfinite }: { page: number; setInfinite: Functio
   }
 
   if (error) return <p>{`${error}`}</p>;
-  if (!data) return <Loading />;
+  if (loading) return <Loading />;
   if (data)
     return (
       <Grid>
