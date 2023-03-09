@@ -33,7 +33,7 @@ The simplified thematic social network project is an application developed in Ty
 <img src="https://user-images.githubusercontent.com/61370784/224117950-fb7d0f0b-22a0-4a27-9645-a02ce817f681.gif" alt="My Project GIF">
 
 <h3 align="center">
-    <a href="https://calculadora-react-flame.vercel.app/">Access demo</a>
+    <a href="https://dogs-social-ten.vercel.app">Access demo</a>
 </h3 >
 
 <p align="center">
