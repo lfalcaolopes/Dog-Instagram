@@ -67,11 +67,15 @@ function Login() {
           <StyledForm onSubmit={handleSubmit}>
             <label>
               <p>Usuário</p>
-              <input type="text" ref={user} size={40} />
+              <span>
+                <input type="text" ref={user} />
+              </span>
             </label>
             <label>
               <p>Senha</p>
-              <input type="password" ref={pass} size={40} />
+              <span>
+                <input type="password" ref={pass} />
+              </span>
             </label>
             {(isMissing || error) && (
               <p
@@ -131,6 +135,10 @@ const Wrapper = styled.div`
       color: #454545;
     }
 
+    input {
+      width: 30rem;
+    }
+
     .cadastro {
       margin-bottom: 3rem;
 
@@ -141,6 +149,29 @@ const Wrapper = styled.div`
       a {
         text-decoration: none;
         outline: none;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+
+    .image-side {
+      display: none;
+    }
+
+    .form-side {
+      label {
+        width: 100%;
+
+        span {
+          display: flex;
+
+          input {
+            width: auto;
+            flex: 1;
+          }
+        }
       }
     }
   }

@@ -42,15 +42,21 @@ function SingUp() {
         <StyledForm onSubmit={handleSubmit}>
           <label>
             <p>Usuário</p>
-            <input type="text" ref={userRef} size={40} />
+            <span>
+              <input type="text" ref={userRef} />
+            </span>
           </label>
           <label>
             <p>Email</p>
-            <input type="email" ref={emailRef} size={40} />
+            <span>
+              <input type="email" ref={emailRef} />
+            </span>
           </label>
           <label>
             <p>Senha</p>
-            <input type="text" ref={passRef} size={40} />
+            <span>
+              <input type="password" ref={passRef} />
+            </span>
           </label>
           {(isMissing || error) && (
             <p
@@ -102,6 +108,33 @@ const Wrapper = styled.div`
     button {
       font-size: 1.2rem;
       color: #454545;
+    }
+
+    input {
+      width: 30rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+
+    .image-side {
+      display: none;
+    }
+
+    .form-side {
+      label {
+        width: 100%;
+
+        span {
+          display: flex;
+
+          input {
+            width: auto;
+            flex: 1;
+          }
+        }
+      }
     }
   }
 `;

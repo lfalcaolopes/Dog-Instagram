@@ -13,7 +13,6 @@ export default function useFetch<T>() {
       setLoading(true);
       response = await fetch(url, options);
       json = await response.json();
-      console.log("first");
       if (!response.ok) throw new Error(json.message);
     } catch (err: any) {
       json = null;

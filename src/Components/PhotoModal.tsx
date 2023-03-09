@@ -123,15 +123,14 @@ const Wrapper = styled.div`
       display: flex;
 
       img {
-        width: 35rem;
-        height: 35rem;
+        width: min(35rem, 80vw);
+        height: min(35rem, 80vw);
       }
     }
 
     .data-side {
       margin: 2rem;
       margin-bottom: 0rem;
-      min-width: 20rem;
       font-family: "Roboto", sans-serif;
 
       display: flex;
@@ -145,11 +144,13 @@ const Wrapper = styled.div`
       form {
         display: flex;
         justify-content: space-between;
-        align-self: end;
 
         input {
           box-shadow: none;
           background-color: #dbdbdb;
+
+          width: 100%;
+          padding-right: 10px;
 
           margin-top: 0;
 
@@ -188,6 +189,31 @@ const Wrapper = styled.div`
   }
   .DialogContent:focus {
     outline: none;
+  }
+
+  @media (max-width: 1050px) {
+    .DialogContent {
+      grid-template-columns: 1fr;
+      width: min(35rem, 80vw);
+      height: 80vh;
+
+      overflow-y: scroll;
+
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+
+      form {
+        label {
+          flex: 1;
+          margin-right: 1rem;
+        }
+      }
+
+      .data-side {
+        margin: 1.5rem;
+      }
+    }
   }
 `;
 

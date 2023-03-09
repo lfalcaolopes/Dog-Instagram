@@ -54,17 +54,21 @@ function Post() {
           <StyledForm onSubmit={postPhoto}>
             <label>
               <p>Nome</p>
-              <div className="input-hover">
-                <input type="text" ref={nameRef} size={40} />
-              </div>
+              <span>
+                <input type="text" ref={nameRef} />
+              </span>
             </label>
             <label>
               <p>Peso</p>
-              <input type="text" ref={weightRef} size={40} />
+              <span>
+                <input type="text" ref={weightRef} />
+              </span>
             </label>
             <label>
               <p>Idade</p>
-              <input type="text" ref={ageRef} size={40} />
+              <span>
+                <input type="text" ref={ageRef} />
+              </span>
             </label>
             <input type="file" onChange={handleChange} />
             {(isMissing || error) && (
@@ -84,7 +88,11 @@ function Post() {
             )}
             <StyledButton dloading={loading}>{loading ? "Carregando" : "Enviar"}</StyledButton>
           </StyledForm>
-          <div className="img-side">{img && <img src={URL.createObjectURL(img)} />}</div>
+          {img && (
+            <div className="img-side">
+              <img src={URL.createObjectURL(img)} />
+            </div>
+          )}
         </div>
       </Wrapper>
     </Margin>
@@ -101,17 +109,20 @@ const Wrapper = styled.div`
   margin: 0 auto;
 
   .grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 3rem;
+    display: flex;
+    justify-content: space-between;
 
     form {
       margin-top: 2rem;
+
+      input {
+        width: 20rem;
+      }
     }
 
     .img-side {
-      height: 23rem;
-      width: 23rem;
+      height: min(23rem, 40vw);
+      width: min(23rem, 40vw);
       img {
         margin-top: 2rem;
         object-fit: cover;
@@ -119,6 +130,32 @@ const Wrapper = styled.div`
         height: 100%;
 
         border-radius: 10px;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .grid {
+      flex-flow: column;
+      margin-bottom: 2rem;
+
+      label {
+        width: 100%;
+
+        span {
+          display: flex;
+
+          input {
+            width: auto;
+            flex: 1;
+          }
+        }
+      }
+
+      .img-side {
+        margin: 0 auto 2rem;
+        width: min(40rem, 80vw);
+        height: min(40rem, 80vw);
       }
     }
   }

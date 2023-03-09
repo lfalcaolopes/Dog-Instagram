@@ -53,6 +53,10 @@ const StyledTitle = styled.h2`
     left: -10px;
     z-index: -1;
   }
+
+  @media (max-width: 375px) {
+    font-size: 2.6rem;
+  }
 `;
 
 const StyledButton = styled.button<{ dloading?: boolean }>`

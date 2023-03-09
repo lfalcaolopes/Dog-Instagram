@@ -39,10 +39,14 @@ function PhotosStack({ page, setInfinite }: { page: number; setInfinite: Functio
   }
 
   useEffect(() => {
-    request(url, { cache: "no-store" });
-  }, [url]);
+    async function dataFetch() {
+      const { json } = await request(url, { cache: "no-store" });
 
-  if (data && data.length < 6) setInfinite(false);
+      if (json && json.length < 6) setInfinite(false);
+    }
+
+    dataFetch();
+  }, [url]);
 
   async function fetchComments(id: number) {
     const response = await fetch(`https://dogsapi.origamid.dev/json/api/comment/${id}`);
@@ -96,6 +100,19 @@ const Grid = styled.div`
     img {
       height: 100%;
     }
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+
+    .big-foto {
+      grid-column: 1;
+      grid-row: 1;
+    }
+  }
+  @media (max-width: 768px) {
+    gap: 0.7rem;
+    margin-bottom: 0.7rem;
   }
 `;
 
